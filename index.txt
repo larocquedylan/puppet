@@ -1,0 +1,110 @@
+import puppeteer, { Page } from "puppeteer";
+import dotenv from "dotenv";
+
+// Load environment variables
+dotenv.config();
+
+const GITHUB_USERNAME = process.env.username;
+const GITHUB_PASSWORD = process.env.password;
+
+(async () => {
+  const browser = await puppeteer.launch({
+    headless: false,
+    defaultViewport: { width: 1280, height: 800 },
+    args: ["--start-maximized"],
+  });
+
+  const page = await browser.newPage();
+
+  try {
+    await page.goto("https://v0.dev", {
+      waitUntil: "networkidle0",
+      timeout: 60000,
+    });
+
+    console.log("Waiting for Sign In button...");
+    await page.waitForSelector('a[href*="/api/auth/login"]', { visible: true });
+    await page.click('a[href*="/api/auth/login"]');
+
+    console.log("Waiting for Vercel login page...");
+    await page.waitForNavigation({
+      waitUntil: "networkidle0",
+      timeout: 60000,
+    });
+
+    console.log("Looking for GitHub button on Vercel login...");
+    await page.waitForSelector('button[aria-label="Continue with GitHub"]', {
+      visible: true,
+      timeout: 60000,
+    });
+
+    const popupPromise = new Promise<Page>((resolve) => {
+      browser.on("targetcreated", async (target) => {
+        const newPage = await target.page();
+        if (newPage && (await newPage.url()).includes("github.com/login")) {
+          resolve(newPage);
+        }
+      });
+    });
+
+    await page.click('button[aria-label="Continue with GitHub"]');
+    const githubPopup = await popupPromise;
+
+    console.log("Filling GitHub login form...");
+    await githubPopup.waitForSelector("#login_field");
+    await githubPopup.type("#login_field", GITHUB_USERNAME!);
+
+    await githubPopup.waitForSelector("#password");
+    await githubPopup.type("#password", GITHUB_PASSWORD!);
+
+    console.log("Submitting login form...");
+    await githubPopup.keyboard.press("Enter");
+
+    // Wait for redirect back to v0.dev
+    console.log("Waiting for authentication to complete...");
+    await page.waitForNavigation({
+      waitUntil: "networkidle0",
+      timeout: 60000,
+    });
+
+    // Make sure we're back on v0.dev and the page is interactive
+    console.log("Waiting for v0.dev to load...");
+    await page.waitForFunction(() => window.location.href.includes("v0.dev"), {
+      timeout: 60000,
+    });
+
+    // Wait for the textarea to be present and interactable
+    console.log("Looking for textarea...");
+    await page.waitForSelector("textarea", {
+      visible: true,
+      timeout: 60000,
+      state: "attached",
+    });
+
+    console.log("Typing prompt...");
+    await page.type("textarea", "Create a modern landing page");
+
+    console.log("Looking for submit button...");
+    await page.waitForSelector('[data-testid="prompt-form-send-button"]', {
+      visible: true,
+      timeout: 60000,
+      state: "attached",
+    });
+
+    console.log("Clicking submit...");
+    await page.click('[data-testid="prompt-form-send-button"]');
+
+    // Wait for the URL to change (indicating generation is complete)
+    console.log("Waiting for generation to complete...");
+    await page.waitForFunction(
+      () => window.location.href !== "https://v0.dev/",
+      { timeout: 120000 } // Increased timeout as generation can take a while
+    );
+
+    // Get and log the final URL
+    const finalUrl = await page.evaluate(() => window.location.href);
+    console.log("\nGenerated design URL:", finalUrl);
+  } catch (error) {
+    console.error("Error during automation:", error);
+  }
+})();
