@@ -5,7 +5,8 @@ import routes from "./routes";
 const app = express();
 
 // Middleware for parsing JSON bodies
-app.use(express.json());
+// Increase the limit to handle potentially large payloads from Clay/Apify
+app.use(express.json({ limit: "50mb" }));
 
 // Apply routes
 app.use("/", routes);
