@@ -19,4 +19,9 @@ export default {
   webhook: {
     clayUrl: process.env.CLAY_WEBHOOK_URL,
   },
+
+  // OpenAI API Key
+  openai: {
+    apiKey: process.env.OPENAI_API_KEY,
+  },
 };
