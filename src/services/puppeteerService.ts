@@ -24,24 +24,6 @@ export async function generateV0Design(prompt: string): Promise<string> {
 
   // If website URL was found, extract images first
   let enhancedPrompt = prompt;
-  /*
-  if (websiteUrl && process.env.ENHANCE_PROMPT_WITH_IMAGES === "true") {
-    console.log(`Enhancing prompt by extracting images from: ${websiteUrl}`);
-    try {
-      const imageUrls = await extractImagesFromWebsite(websiteUrl);
-      const uniqueImages = [...new Set(imageUrls)]; // Ensure unique images
-      if (uniqueImages.length > 0) {
-        console.log(`Found ${uniqueImages.length} unique images`);
-
-        // The image selection logic previously here is already commented/removed
-      }
-    } catch (error) {
-      console.warn(
-        `Failed to extract images to enhance prompt: ${error}. Continuing with original prompt.`
-      );
-    }
-  }
-  */
 
   let browser: Browser | undefined;
   try {
