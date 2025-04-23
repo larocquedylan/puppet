@@ -17,10 +17,9 @@ XDG_CONFIG_HOME = "$REPL_HOME/.config"
 PATH = "$REPL_HOME/node_modules/.bin:$REPL_HOME/.config/npm/node_global/bin:$PATH"
 
 [deployment]
-run = ["sh", "-c", "npm start"]
-deploymentTarget = "cloudrun"
+run = ["sh", "-c", "npm run start"]
+deploymentTarget = "gce"
 ignorePorts = false
-build = ["sh", "-c", "npm install && npm run build"]
 
 [languages]
 
