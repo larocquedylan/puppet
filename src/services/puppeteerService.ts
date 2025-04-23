@@ -266,10 +266,15 @@ export async function extractImagesFromWebsite(
   try {
     console.log(`Launching browser to extract images from ${websiteUrl}...`);
     browser = await puppeteer.launch({
-      headless: true,
+      headless: "new",
       defaultViewport: { width: 1280, height: 800 },
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      executablePath: "/usr/bin/chromium",
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu"
+      ],
+      executablePath: "/nix/store/chromium-*-unwrapped/libexec/chromium/chrome",
     });
 
     const page = await browser.newPage();
