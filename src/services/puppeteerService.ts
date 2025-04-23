@@ -24,48 +24,16 @@ export async function generateV0Design(prompt: string): Promise<string> {
 
   // If website URL was found, extract images first
   let enhancedPrompt = prompt;
-  if (websiteUrl) {
+  /*
+  if (websiteUrl && process.env.ENHANCE_PROMPT_WITH_IMAGES === "true") {
+    console.log(`Enhancing prompt by extracting images from: ${websiteUrl}`);
     try {
-      console.log(
-        `Extracting images from ${websiteUrl} to enhance the prompt...`
-      );
       const imageUrls = await extractImagesFromWebsite(websiteUrl);
+      const uniqueImages = [...new Set(imageUrls)]; // Ensure unique images
+      if (uniqueImages.length > 0) {
+        console.log(`Found ${uniqueImages.length} unique images`);
 
-      // Filter out data: URLs, dummy images, and tiny icons
-      // Focus on content images like banners, photos, etc.
-      const contentImages = imageUrls.filter(
-        (url) =>
-          !url.startsWith("data:") &&
-          !url.includes("dummy.png") &&
-          !url.includes("flag") &&
-          !url.toLowerCase().includes("icon")
-      );
-
-      // If we found potential content images, include them in the prompt
-      if (contentImages.length > 0) {
-        // Take up to 8 images, prioritizing JPGs and larger images which are more likely to be content
-        // Use set to remove duplicates
-        const uniqueImages = [...new Set(contentImages)];
-        const selectedImages = uniqueImages
-          .filter(
-            (url) =>
-              url.toLowerCase().endsWith(".jpg") ||
-              url.toLowerCase().endsWith(".jpeg")
-          )
-          .concat(
-            uniqueImages.filter(
-              (url) =>
-                !url.toLowerCase().endsWith(".jpg") &&
-                !url.toLowerCase().endsWith(".jpeg")
-            )
-          )
-          .slice(0, 8);
-
-        const imageReferences = selectedImages.join("\n");
-        enhancedPrompt = `${prompt}\n\nUse these actual images from the original website in your redesign:\n${imageReferences}`;
-        console.log(
-          `Enhanced prompt with ${selectedImages.length} image references`
-        );
+        // The image selection logic previously here is already commented/removed
       }
     } catch (error) {
       console.warn(
@@ -73,6 +41,7 @@ export async function generateV0Design(prompt: string): Promise<string> {
       );
     }
   }
+  */
 
   let browser: Browser | undefined;
   try {
