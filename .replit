@@ -29,3 +29,15 @@ syntax = "typescript"
 
 [languages.typescript.languageServer]
 start = "typescript-language-server --stdio"
+
+[workflows]
+runButton = "Run"
+
+[[workflows.workflow]]
+name = "Run"
+author = 16139029
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
