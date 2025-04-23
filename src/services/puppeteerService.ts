@@ -269,7 +269,7 @@ export async function extractImagesFromWebsite(
       headless: true,
       defaultViewport: { width: 1280, height: 800 },
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+      executablePath: "/usr/bin/chromium",
     });
 
     const page = await browser.newPage();
