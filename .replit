@@ -20,6 +20,7 @@ PATH = "$REPL_HOME/node_modules/.bin:$REPL_HOME/.config/npm/node_global/bin:$PAT
 run = ["sh", "-c", "npm run start"]
 deploymentTarget = "gce"
 ignorePorts = false
+build = ["sh", "-c", "npm install && npm run build"]
 
 [languages]
 
@@ -40,4 +41,4 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm run dev"
+args = "npm install && npm run dev"
