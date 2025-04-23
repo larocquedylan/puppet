@@ -266,7 +266,7 @@ export async function extractImagesFromWebsite(
   try {
     console.log(`Launching browser to extract images from ${websiteUrl}...`);
     browser = await puppeteer.launch({
-      headless: "new",
+      headless: true,
       defaultViewport: { width: 1280, height: 800 },
       args: [
         "--no-sandbox",
