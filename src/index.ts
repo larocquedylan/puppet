@@ -4,7 +4,7 @@ import config from "./config/environment";
 const PORT = config.server.port;
 
 // Start the server
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server listening on port ${PORT}`);
   console.log(
     `Ready to accept POST requests at http://localhost:${PORT}/generate`
