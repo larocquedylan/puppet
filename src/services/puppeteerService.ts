@@ -18,9 +18,6 @@ export async function generateV0Design(prompt: string): Promise<string> {
   );
   const websiteUrl = websiteUrlMatch ? websiteUrlMatch[1] : null;
 
-  // If website URL was found, extract images first
-  let enhancedPrompt = prompt;
-
   let browser: Browser | undefined;
   try {
     console.log("Launching browser...");
@@ -97,7 +94,7 @@ export async function generateV0Design(prompt: string): Promise<string> {
       const textarea = document.querySelector("textarea");
       if (textarea) textarea.value = "";
     });
-    await page.type("textarea", enhancedPrompt);
+    await page.type("textarea", prompt);
 
     console.log("Looking for submit button...");
     await page.waitForSelector('[data-testid="prompt-form-send-button"]', {
@@ -158,27 +155,6 @@ export async function generateV0Design(prompt: string): Promise<string> {
       console.error(
         `Polling: Timeout reached after ${elapsedTime}s waiting for stable '/chat/' URL (different from ${urlAfterSubmit}). Last checked URL: ${currentUrl}`
       );
-      const timeoutScreenshotPath = `timeout_snapshot_${Date.now()}.png`;
-      try {
-        if (page) {
-          await page.screenshot({
-            path: timeoutScreenshotPath,
-            fullPage: true,
-          });
-          console.log(
-            `Polling: Screenshot captured on timeout: ${timeoutScreenshotPath}`
-          );
-        } else {
-          console.log(
-            "Polling: Page object not available for timeout screenshot."
-          );
-        }
-      } catch (screenshotError) {
-        console.error(
-          "Polling: Failed to capture screenshot on timeout:",
-          screenshotError
-        );
-      }
       throw new Error(
         `Timeout waiting for stable '/chat/' URL via polling after ${elapsedTime}s. Last URL seen: ${currentUrl}`
       );
