@@ -1,7 +1,7 @@
 import app from "./app";
 import config from "./config/environment";
 
-const PORT = config.server.port;
+const PORT = Number(config.server.port);
 
 // Start the server
 app.listen(PORT, "0.0.0.0", () => {
