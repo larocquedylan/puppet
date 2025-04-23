@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { generateV0Design } from "../services/puppeteerService";
 import config from "../config/environment";
 import { notifyWebhook } from "../services/webhookService";
+
 export const generateDesign = (req: Request, res: Response): void => {
   const { websiteUrl } = req.body;
   const CLAY_WEBHOOK_URL = config.webhook.clayUrl;
@@ -24,15 +25,12 @@ export const generateDesign = (req: Request, res: Response): void => {
   const jobId = uuidv4();
   console.log(`[${jobId}] API: Received request for: ${websiteUrl}`);
 
-  // Construct the dynamic prompt for redesign
   const prompt = `1. Redesign this website: ${websiteUrl}. Use the actual images from the original website where appropriate.`;
   console.log(`[${jobId}] API: Using prompt: "${prompt}"`);
 
-  // Start the background task asynchronously
   processPuppeteerJobInBackground(prompt, jobId);
   console.log(`[${jobId}] API: Handed off job to background processor.`);
 
-  // Immediately respond with 202 Accepted and the Job ID
   res.status(202).json({ status: "processing", jobId: jobId });
 };
 

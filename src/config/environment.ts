@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 
 // Load environment variables
-dotenv.config();
+dotenv.config({ override: true });
 
 export default {
   // GitHub credentials
