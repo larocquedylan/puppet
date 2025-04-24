@@ -6,8 +6,8 @@ dotenv.config();
 export default {
   // GitHub credentials
   github: {
-    username: process.env.username,
-    password: process.env.password,
+    username: process.env.GITHUB_USERNAME,
+    password: process.env.GITHUB_PASSWORD,
   },
 
   // Server configuration
