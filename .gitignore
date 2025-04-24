@@ -1,5 +1,6 @@
-.env        
+ 
 /node_modules/
 dist/
 .qodo/
-
+.env
+.env # if not already there
