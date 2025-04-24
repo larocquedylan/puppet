@@ -29,7 +29,7 @@ export async function generateV0Design(prompt: string): Promise<string> {
   try {
     console.log("Launching browser...");
     browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       defaultViewport: { width: 1280, height: 800 },
       args: ["--start-maximized", "--no-sandbox", "--disable-setuid-sandbox"],
     });
