@@ -1,5 +1,6 @@
-.qodo
-.env
-/node_modules
-./qodo
-/dist
+.env*          # ignore all env files …
+!.env.example  # …except the template
+/node_modules/
+dist/
+.qodo/
+
