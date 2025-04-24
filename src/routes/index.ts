@@ -1,14 +1,10 @@
 import { Router, Request, Response } from "express";
 import v0Routes from "./v0Routes";
-import imageRoutes from "./imageRoutes";
 
 const router = Router();
 
 // Mount v0 routes
 router.use("/", v0Routes);
-
-// Mount image routes
-router.use("/", imageRoutes);
 
 // Basic health check endpoint
 router.get("/", (req: Request, res: Response) => {
