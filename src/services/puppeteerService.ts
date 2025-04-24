@@ -36,6 +36,8 @@ export async function generateV0Design(prompt: string): Promise<string> {
 
     const page = await browser.newPage();
 
+    await page.tracing.start({ path: "/tmp/trace.json", screenshots: true });
+
     await page.goto("https://v0.dev", {
       waitUntil: "networkidle0",
       timeout: 60000,
@@ -191,7 +193,9 @@ export async function generateV0Design(prompt: string): Promise<string> {
     const finalUrl = currentUrl;
     console.log("\nGenerated design URL (Chat URL):", finalUrl);
 
+    await page.tracing.stop();
     await browser.close();
+
     console.log("Browser closed.");
     return finalUrl;
   } catch (error) {
